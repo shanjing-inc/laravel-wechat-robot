@@ -70,7 +70,7 @@
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, $url);
             curl_setopt($ch, CURLOPT_FAILONERROR, false);
-            curl_setopt($ch, CURLOPT_REFERER, $_SERVER["HTTP_HOST"]);
+//            curl_setopt($ch, CURLOPT_REFERER, $_SERVER["HTTP_HOST"]);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             //https 请求
             if(strlen($url) > 5 && strtolower(substr($url,0,5)) == "https" ) {

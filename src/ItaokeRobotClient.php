@@ -1,0 +1,286 @@
+<?php
+
+namespace Shanjing\LaravelWechatRobot;
+
+
+use Illuminate\Support\Facades\Log;
+
+/**
+* 淘客相关信息接口
+* @date: 2017-9-26 上午11:26:42
+* @author: Caption
+* @copyright 2016-2017 ITAOKE.ORG
+*/
+class ItaokeRobotClient
+{
+
+    /**********************************************************************************************
+     ***************************************     机器人管理     ***********************************
+     *********************************************************************************************/
+
+    /**
+     * 创建机器人。
+     * @param $month     '月数'
+     * @param $robotType '机器人类型 1 发单机器人 2转发机器人 3 返利机器人 4全能机器人 5小型机器人 6发圈机器人'
+     * @param $wxId      '微信号'
+     * @param $agentUid  '代理id'
+     * @return array
+     *
+     * @author lou <lou@shanjing-inc.com>
+     */
+    public function createRobot($month, $robotType, $wxId, $agentUid = null)
+    {
+        $api = "ItaokeRobotCreateGetRequest";
+        return $this->sendRequest($api, [
+            'month'       => $month,
+            'robot_type'  => $robotType,
+            'wechatrobot' => $wxId,
+            'agent_uid'   => $agentUid,
+        ]);
+    }
+
+    /**
+     * 获取机器人列表。
+     * @param int $page  '页'
+     * @param int $size  '每页个数'
+     * @return array
+     * @throws \Exception
+     *
+     * @author lou <lou@shanjing-inc.com>
+     */
+    public function robotList($page = 1, $size = 20)
+    {
+        $this->tb_top = $this->_get_itk_top();
+        $req = $this->tb_top->load_api('ItaokeRobotListGetRequest');
+        $req->putOtherTextParam('p', $page);
+        $req->putOtherTextParam('page_size', $size);
+
+        $resp = (array)$this->tb_top->execute($req);
+        return $resp;
+    }
+
+    /**
+     * 获取机器人详情。
+     * @param $robotId   '机器人id'
+     * @return array
+     *
+     * @author lou <lou@shanjing-inc.com>
+     */
+    public function robotDetail($robotId)
+    {
+        $api = "ItaokeRobotDetailGetRequest";
+        return $this->sendRequest($api, [
+            'robot_id' => $robotId,
+        ]);
+    }
+
+
+    /**
+     * 修改机器人
+     *
+     * @param $robotId   '机器人id'
+     * @param $month     '续费 月数'
+     * @param $wxId      '微信号 更换号的时候传'
+     * @param $groupNum  '群个数'
+     * @return array
+     *
+     * @author lou <lou@shanjing-inc.com>
+     */
+    public function modifyRobot($robotId, $month = null, $wxId = null, $groupNum = null)
+    {
+        $api = "ItaokeRobotChangeGetRequest";
+        return $this->sendRequest($api, [
+            'robot_id'    => $robotId,
+            'month'       => $month,
+            'wechatrobot' => $wxId,
+            'group_num'   => $groupNum,
+        ]);
+    }
+
+    /**
+     * 删除机器人
+     *
+     * @param $robotId '机器人id'
+     * @return array
+     *
+     * @author lou <lou@shanjing-inc.com>
+     */
+    public function delelteRobot($robotId)
+    {
+        $api = "ItaokeRobotDeleteGetRequest";
+        return $this->sendRequest($api, [
+            'robot_id' => $robotId
+        ]);
+    }
+
+
+    /**********************************************************************************************
+     *****************************************     登录     ***************************************
+     *********************************************************************************************/
+
+    /**
+     * 获取登录二维码
+     *
+     * @param $robotId '机器人id，必传！！' 执行登录接口返回此字段，记得保存数据库里
+     * @return array
+     *
+     * @author lou <lou@shanjing-inc.com>
+     */
+    public function getLoginQrcode($robotId)
+    {
+        $api = 'ItaokeRobotQrcodeMacloginRequest';
+        return $this->sendRequest($api, [
+            'robot_id' => $robotId
+        ]);
+    }
+
+    /**
+     * 循环是否登陆（真正的登录接口）
+     *
+     * @param $robotId  '新增机器人接口的内部id'
+     * @param $wId      'wId 获取二维码接口返回的微信实例id'
+     * @return array
+     *
+     * @author lou <lou@shanjing-inc.com>
+     */
+    public function confirmLogin($robotId, $wId)
+    {
+        $api = 'ItaokeRobotAsyncMloginRequest';
+        return $this->sendRequest($api, [
+            'robot_id' => $robotId,
+            'wId'      => $wId,
+        ]);
+    }
+
+
+    /**********************************************************************************************
+     ***************************************     群管理     ***************************************
+     *********************************************************************************************/
+    public function groups($params)
+    {
+        $api = "ItaokeRobotRoomListDetailRequest";
+        return $this->sendRequest($api, $params);
+    }
+    public function memberDetail($params)
+    {
+        $api = "ItaokeRobotFriendDetailRequest";
+        return $this->sendRequest($api, $params);
+    }
+
+    public function groupMember($params)
+    {
+        $api = "ItaokeRobotMacGetChatroomMemberRequest";
+        return $this->sendRequest($api, $params);
+    }
+
+    public function groupDetail($params)
+    {
+        $api = "ItaokeRobotRoomDetailRequest";
+        return $this->sendRequest($api, $params);
+    }
+
+
+    /**********************************************************************************************
+     ***************************************     消息管理     **************************************
+     *********************************************************************************************/
+    /**
+     * 发送文本消息
+     * @param $robotId
+     * @param $toWxId
+     * @param $content
+     * @return array
+     *
+     * @author lou <lou@shanjing-inc.com>
+     */
+    public function sendTextMsg($robotId, $toWxId, $content)
+    {
+        $api = "ItaokeRobotMacSendTextRequest";
+        return $this->sendRequest($api, [
+            'robot_id' => $robotId,
+            'content' => $content,
+            'toWxId' => $toWxId,
+        ]);
+    }
+
+    /**
+     * 发送图片消息
+     * @param $robotId
+     * @param $toWxId
+     * @param $picUrl
+     * @return array
+     *
+     * @author lou <lou@shanjing-inc.com>
+     */
+    public function sendImageMsg($robotId, $toWxId, $picUrl)
+    {
+        $api = "ItaokeRobotMacSendImageRequest";
+        return $this->sendRequest($api, [
+            'robot_id' => $robotId,
+            'pic_url' => $picUrl,
+            'toWxId' => $toWxId,
+        ]);
+    }
+
+
+    /**********************************************************************************************
+     ***************************************     基础方法     **************************************
+     *********************************************************************************************/
+    /**
+     * 获取ITK 云端数据
+     */
+    public function getItaokeQuan($cinfo)
+    {
+        $this->tb_top = $this->_get_itk_top();
+        $req = $this->tb_top->load_api('ItaokeCouponsGetRequest');
+        // $req->setPageNo($this->sysParams['p']);
+        // $req->setCat($this->sysParams['catId']);
+        // $req->setSort($this->sysParams['sort']?$this->sysParams['sort']:$cinfo['sort']);
+        $req->setMaxPrice($cinfo['max_price']);
+        $req->setMinPrice($cinfo['min_price']);
+        $req->setMaxVolume($cinfo['max_volume']);
+        $req->setMinVolume($cinfo['mix_volume']);
+        $req->putOtherTextParam('source_id', '');
+        $req->putOtherTextParam('ems', '');
+        $req->putOtherTextParam('activity_type', '');
+        $req->putOtherTextParam('page_size', 20);
+
+        $resp = (array)$this->tb_top->execute($req);
+        return $resp;
+    }
+
+    /**
+     *
+     * @author Yingjie Feng <fengit@shanjing-inc.com>
+     */
+    public function sendRequest($api, $params = [])
+    {
+        $this->tb_top = $this->_get_itk_top();
+        $req = $this->tb_top->load_api($api);
+
+        if ($params) {
+            foreach ($params as $key => $value) {
+                $req->putOtherTextParam($key, $value);
+            }
+        }
+
+        $resp = (array)$this->tb_top->execute($req);
+        Log::info(['api' => $api, 'req' => $params,'resp' => $resp]);
+        return $resp;
+    }
+
+    private function _get_itk_top()
+    {
+        if (!defined('ITK_DATA_PATH')) {
+            define("ITK_DATA_PATH", storage_path("framework/itk/"));
+        }
+
+        include_once('Itaoke/TopClient.php');
+        include_once('Itaoke/RequestCheckUtil.php');
+        include_once('Itaoke/Logger.php');
+
+        $top = new \TopClient();
+        $top->appkey = Config('wechat.robot.itaoke.app_key');   // 您的ITK  appkey
+        $top->secretKey = Config('wechat.robot.itaoke.secret'); // 您的ITK  appsecret
+        return $top;
+    }
+}
