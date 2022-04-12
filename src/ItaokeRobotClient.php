@@ -156,28 +156,71 @@ class ItaokeRobotClient
     /**********************************************************************************************
      ***************************************     群管理     ***************************************
      *********************************************************************************************/
-    public function groups($params)
+    /** 获取群成员
+     * @param $robotId
+     * @return array
+     *
+     * @author lou <lou@shanjing-inc.com>
+     */
+    public function groups($robotId)
     {
         $api = "ItaokeRobotRoomListDetailRequest";
-        return $this->sendRequest($api, $params);
-    }
-    public function memberDetail($params)
-    {
-        $api = "ItaokeRobotFriendDetailRequest";
-        return $this->sendRequest($api, $params);
+        return $this->sendRequest($api, [
+            'robot_id' => $robotId,
+        ]);
     }
 
-    public function groupMember($params)
-    {
-        $api = "ItaokeRobotMacGetChatroomMemberRequest";
-        return $this->sendRequest($api, $params);
-    }
-
-    public function groupDetail($params)
+    /**
+     * 获取群详情
+     * @param $robotId
+     * @param $roomId
+     * @return array
+     *
+     * @author lou <lou@shanjing-inc.com>
+     */
+    public function groupDetail($robotId, $roomId)
     {
         $api = "ItaokeRobotRoomDetailRequest";
-        return $this->sendRequest($api, $params);
+        return $this->sendRequest($api, [
+            'robot_id' => $robotId,
+            'room_id'  => $roomId,
+        ]);
     }
+
+    /**
+     * 获取群成员信息
+     * @param $robotId
+     * @param $roomId
+     * @return array
+     *
+     * @author lou <lou@shanjing-inc.com>
+     */
+    public function groupMember($robotId, $roomId)
+    {
+        $api = "ItaokeRobotMacGetChatroomMemberRequest";
+        return $this->sendRequest($api, [
+            'robot_id' => $robotId,
+            'room_id'  => $roomId,
+        ]);
+    }
+
+    /**
+     * 获取好友详情
+     * @param $robotId
+     * @param $wId
+     * @return array
+     *
+     * @author lou <lou@shanjing-inc.com>
+     */
+    public function memberDetail($robotId, $wId)
+    {
+        $api = "ItaokeRobotFriendDetailRequest";
+        return $this->sendRequest($api, [
+            'robot_id' => $robotId,
+            'wx_id' => $wId
+        ]);
+    }
+
 
 
     /**********************************************************************************************
