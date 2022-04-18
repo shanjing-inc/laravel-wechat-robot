@@ -244,6 +244,28 @@ class ItaokeRobotClient
             'toWxId' => $toWxId,
         ]);
     }
+    
+    /**
+     * 群聊@发消息
+     * @param $robotId - 机器人 id
+     * @param $toWxId  - 群 id
+     * @param $atWxId  - @ wxID
+     * @param $content - 内容
+     * @return array
+     *
+     * @author lou <lou@shanjing-inc.com>
+     */
+    public function sendAtTextMsg($robotId, $toWxId, $atWxId,$content)
+    {
+        $api = "ItaokeRobotMacGroupAtRequest";
+        return $this->sendRequest($api, [
+            'robot_id' => $robotId,
+            'content' => $content,
+            'wx_id' => $toWxId,
+            'ant' => $atWxId,
+        ]);
+    }
+
 
     /**
      * 发送图片消息
