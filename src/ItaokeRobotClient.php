@@ -74,7 +74,6 @@ class ItaokeRobotClient
         ]);
     }
 
-
     /**
      * 修改机器人
      *
@@ -94,6 +93,24 @@ class ItaokeRobotClient
             'month'       => $month,
             'wechatrobot' => $wxId,
             'group_num'   => $groupNum,
+        ]);
+    }
+
+    /**
+     * 重置机器人
+     *
+     * @param $robotId   '机器人id'
+     * @param $changeIp  '是否更换服务器'
+     * @return array
+     *
+     * @author lou <lou@shanjing-inc.com>
+     */
+    public function resetRobot($robotId, $changeIp = true)
+    {
+        $api = "ItaokeRobotResetGetRequest";
+        return $this->sendRequest($api, [
+            'robot_id'    => $robotId,
+            'change_ip'   => $changeIp
         ]);
     }
 
