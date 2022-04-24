@@ -303,6 +303,24 @@ class ItaokeRobotClient
         ]);
     }
 
+    /**
+     * 转发图片
+     * @param $robotId - 机器人
+     * @param $toWxId  - 发送微信好友/群id。一般wxid_开头
+     * @param $content - 消息 xml 内容
+     * @return array
+     *
+     * @author lou <lou@shanjing-inc.com>
+     */
+    public function forwardImageMsg($robotId, $toWxId, $content)
+    {
+        $api = "ItaokeRobotMacSendRecvImageRequest";
+        return $this->sendRequest($api, [
+            'robot_id' => $robotId,
+            'wx_id' => $toWxId,
+            'content' => $content,
+        ]);
+    }
 
     /**********************************************************************************************
      ***************************************     基础方法     **************************************
