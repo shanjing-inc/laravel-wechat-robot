@@ -382,6 +382,7 @@ class ItaokeRobotClient
         $top = new \TopClient();
         $top->appkey = Config('wechat.robot.itaoke.app_key');   // 您的ITK  appkey
         $top->secretKey = Config('wechat.robot.itaoke.secret'); // 您的ITK  appsecret
+        $top->proxy = $this->proxy;
         return $top;
     }
 }
