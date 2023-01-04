@@ -3,6 +3,7 @@
         
         public $appkey;
         public $secretKey;
+        public $proxy;
         // 生产
         public $gatewayUrl = "http://router.itaoke.org/api";
         // 备用
@@ -72,6 +73,12 @@
             curl_setopt($ch, CURLOPT_FAILONERROR, false);
 //            curl_setopt($ch, CURLOPT_REFERER, $_SERVER["HTTP_HOST"]);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            if (!empty($this->proxy)) {
+                $headers = [
+                   'X-PROXY:' .  $this->proxy,
+                ];
+                curl_setopt ($ch, CURLOPT_HTTPHEADER, $headers);
+            }
             //https 请求
             if(strlen($url) > 5 && strtolower(substr($url,0,5)) == "https" ) {
                 curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
@@ -164,7 +171,7 @@
             $sysParams["timestamp"] = time();
             // $sysParams["domain"] = $_SERVER['SERVER_NAME'];
             $sysParams["domain"] = "tbxzs.com";
-            $sysParams["client"] = "127.0.0.1";
+            $sysParams["client"] = "39.88.38.251"; //"127.0.0.1";
             $sysParams["partner_id"] = $this->sdkVersion;
             
             if (null != $session){
