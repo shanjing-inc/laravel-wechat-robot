@@ -13,8 +13,6 @@ use Illuminate\Support\Facades\Log;
 */
 class ItaokeRobotClient
 {
-    public $proxy;
-
     /**********************************************************************************************
      ***************************************     机器人管理     ***********************************
      *********************************************************************************************/
@@ -356,6 +354,13 @@ class ItaokeRobotClient
     public function sendRequest($api, $params = [])
     {
         $this->tb_top = $this->_get_itk_top();
+        // 设置代理
+        if (key_exists('robot_id', $params)) {
+            $proxy = $this->getProxy($params['robot_id']);
+            if (!empty($proxy)) {
+                $this->tb_top->proxy = $proxy;
+            }
+        }
         $req = $this->tb_top->load_api($api);
 
         if ($params) {
@@ -382,7 +387,22 @@ class ItaokeRobotClient
         $top = new \TopClient();
         $top->appkey = Config('wechat.robot.itaoke.app_key');   // 您的ITK  appkey
         $top->secretKey = Config('wechat.robot.itaoke.secret'); // 您的ITK  appsecret
-        $top->proxy = $this->proxy;
         return $top;
+    }
+
+    /**
+     * 获取代理
+     *
+     * @param [type] $robotId
+     * @return void
+     * @example
+     * @author lou@shanjing-inc.com
+     * @since 2023-01-05
+     */
+    private function getProxy($robotId) {
+        if(function_exists('getItaokeRobotProxy')){
+            return getItaokeRobotProxy($robotId);
+        }
+        return null;
     }
 }
