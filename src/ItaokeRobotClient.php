@@ -96,6 +96,22 @@ class ItaokeRobotClient
     }
 
     /**
+     * 强制下线机器人
+     *
+     * @param $robotId   '机器人id'
+     * @return array
+     *
+     * @author lou <lou@shanjing-inc.com>
+     */
+    public function forceOfflineRobot($robotId)
+    {
+        $api = "ItaokeRobotForceOfflineGetRequest";
+        return $this->sendRequest($api, [
+            'robot_id'    => $robotId,
+        ]);
+    }
+
+    /**
      * 重置机器人
      *
      * @param $robotId   '机器人id'
