@@ -337,6 +337,55 @@ class ItaokeRobotClient
         ]);
     }
 
+    /**
+     * 发送卡片消息
+     * @param $robotId
+     * @param $toWxId
+     * @param $picUrl
+     * @return array
+     *
+     * @author lou <lou@shanjing-inc.com>
+     */
+    public function sendCardMsg($robotId, $toWxId, $title, $url, $description, $thumbUrl)
+    {
+        $api = "ItaokeRobotMacSendCardRequest";
+        return $this->sendRequest($api, [
+            'robot_id'    => $robotId,
+            'wx_id'       => $toWxId,
+            'title'       => $title,
+            'url'         => $url,
+            'description' => $description,
+            'thumbUrl'    => $thumbUrl,
+
+        ]);
+    }
+
+    /**
+     * 发送小程序
+     * @param $robotId
+     * @param $toWxId
+     * @param $picUrl
+     * @return array
+     *
+     * @author lou <lou@shanjing-inc.com>
+     */
+    public function sendAppMsg($robotId, $toWxId, $displayName, $iconUrl, $id, $pagePath, $title, $username, $thumbUrl)
+    {
+        $api = "ItaokeRobotMacSendAppRequest";
+        return $this->sendRequest($api, [
+            'robot_id'     => $robotId,
+            'to_wx_id'     => $toWxId,
+            'display_name' => $displayName,
+            'icon_url'     => $iconUrl,
+            'id'           => $id,
+            'page_path'    => $pagePath,
+            'thumb_url'    => $thumbUrl,
+            'title'        => $title,
+            'user_name'    => $username,
+
+        ]);
+    }
+
     /**********************************************************************************************
      ***************************************     基础方法     **************************************
      *********************************************************************************************/
