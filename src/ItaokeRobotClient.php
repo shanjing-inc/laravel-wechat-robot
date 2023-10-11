@@ -154,16 +154,36 @@ class ItaokeRobotClient
      * 获取登录二维码
      *
      * @param $robotId '机器人id，必传！！' 执行登录接口返回此字段，记得保存数据库里
+     * @param [type] $proCode 省编码，可不传，通用编码，比如江苏：320000 
+     * @param [type] $cityCode 市编码，可不传，通用编码，比如南京：320100 
      * @return array
      *
      * @author lou <lou@shanjing-inc.com>
      */
-    public function getLoginQrcode($robotId)
+    /**
+     * Undocumented function
+     *
+     * @param [type] $robotId
+     * @param [type] $proCode
+     * @param [type] $cityCode
+     * @return void
+     * @example
+     * @author lou@shanjing-inc.com
+     * @since 2023-10-11
+     */
+    public function getLoginQrcode($robotId, $proCode = null, $cityCode = null)
     {
         $api = 'ItaokeRobotQrcodeMacloginRequest';
-        return $this->sendRequest($api, [
+        $params = [
             'robot_id' => $robotId
-        ]);
+        ];
+        if (!empty($proCode)) {
+            $params['proCode'] = $proCode;
+        }
+        if (!empty($cityCode)) {
+            $params['cityCode'] = $cityCode;
+        }
+        return $this->sendRequest($api, $params);
     }
 
     /**
