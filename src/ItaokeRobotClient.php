@@ -13,6 +13,20 @@ use Illuminate\Support\Facades\Log;
 */
 class ItaokeRobotClient
 {
+    public $appkey; // 您的ITK  appkey
+    public $secretKey;
+
+    public function __construct($appkey = null, $secretKey = null) {
+
+        if (!empty($appkey) && !empty($secretKey)) {
+            $this->appkey    = $appkey;
+            $this->secretKey = $secretKey;
+
+        } else {
+            $this->appkey    = Config('wechat.robot.itaoke.app_key');
+            $this->secretKey = Config('wechat.robot.itaoke.secret');
+        }
+    }
     /**********************************************************************************************
      ***************************************     机器人管理     ***********************************
      *********************************************************************************************/
@@ -470,8 +484,8 @@ class ItaokeRobotClient
         include_once('Itaoke/Logger.php');
 
         $top = new \TopClient();
-        $top->appkey = Config('wechat.robot.itaoke.app_key');   // 您的ITK  appkey
-        $top->secretKey = Config('wechat.robot.itaoke.secret'); // 您的ITK  appsecret
+        $top->appkey    = $this->appkey;   // 您的ITK  appkey
+        $top->secretKey = $this->secretKey; // 您的ITK  appsecret
         return $top;
     }
 
