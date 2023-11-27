@@ -15,6 +15,8 @@ class ItaokeRobotClient
 {
     public $appkey; // 您的ITK  appkey
     public $secretKey;
+    public $domain;
+    public $client;
 
     public function __construct($appkey = null, $secretKey = null) {
 
@@ -486,6 +488,8 @@ class ItaokeRobotClient
         $top = new \TopClient();
         $top->appkey    = $this->appkey;   // 您的ITK  appkey
         $top->secretKey = $this->secretKey; // 您的ITK  appsecret
+        $top->domain    = $this->domain;   // domain
+        $top->client    = $this->client; // client
         return $top;
     }
 

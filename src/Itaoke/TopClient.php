@@ -4,6 +4,9 @@
         public $appkey;
         public $secretKey;
         public $proxy;
+        // domain client
+        public $domain;
+        public $client;
         // 生产
         public $gatewayUrl = "http://router.itaoke.org/api";
         // 备用
@@ -170,8 +173,8 @@
             $sysParams["method"] = $request->getApiMethodName();
             $sysParams["timestamp"] = time();
             // $sysParams["domain"] = $_SERVER['SERVER_NAME'];
-            $sysParams["domain"] = "tbxzs.com";
-            $sysParams["client"] = "39.88.38.251"; //"127.0.0.1";
+            $sysParams["domain"] = $this->domain ?? "tbxzs.com";
+            $sysParams["client"] = $this->client ?? "39.88.38.251"; //"127.0.0.1";
             $sysParams["partner_id"] = $this->sdkVersion;
             
             if (null != $session){
