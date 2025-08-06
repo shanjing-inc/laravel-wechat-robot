@@ -17,6 +17,7 @@ class ItaokeRobotClient
     public $secretKey;
     public $domain;
     public $client;
+    public $tb_top; // TopClient实例
 
     public function __construct($appkey = null, $secretKey = null) {
 
@@ -182,12 +183,13 @@ class ItaokeRobotClient
      * @param [type] $robotId
      * @param [type] $proCode
      * @param [type] $cityCode
+     * @param [type] $loginType 登录类型：ipad、mac
      * @return void
      * @example
      * @author lou@shanjing-inc.com
      * @since 2023-10-11
      */
-    public function getLoginQrcode($robotId, $proCode = null, $cityCode = null)
+    public function getLoginQrcode($robotId, $proCode = null, $cityCode = null, $loginType = 'ipad')
     {
         $api = 'ItaokeRobotQrcodeMacloginRequest';
         $params = [
@@ -199,6 +201,11 @@ class ItaokeRobotClient
         if (!empty($cityCode)) {
             $params['cityCode'] = $cityCode;
         }
+
+        if (!empty($loginType)) {
+            $params['login_type'] = $loginType;
+        }
+        
         return $this->sendRequest($api, $params);
     }
 
@@ -419,6 +426,29 @@ class ItaokeRobotClient
             'title'        => $title,
             'user_name'    => $username,
 
+        ]);
+    }
+
+    /**
+     * 滑块登录验证
+     * 使用接口：itaoke.robot.verify.queue，传递参数robot_id、verify_url、verify_uuid 、auto 是否自动 1自动 0，传1 优惠狗帮你滑块，用户无感等待即可（自动机制还没好），传0则需要用户下载优惠狗的滑块APP扫码手动滑块，二维码会在本接口透出（使用上面的APP扫这个码即可
+     *
+     * @param string $robotId 机器人ID
+     * @param string $verifyUrl 验证URL
+     * @param string $verifyUuid 验证UUID
+     * @param int $auto 是否自动 1自动 0手动
+     * @return array
+     *
+     * @author lou <lou@shanjing-inc.com>
+     */
+    public function verifyLogin($robotId, $verifyUrl, $verifyUuid, $auto = 1)
+    {
+        $api = "ItaokeRobotVerifyQueueRequest";
+        return $this->sendRequest($api, [
+            'robot_id' => $robotId,
+            'verify_url' => $verifyUrl,
+            'verify_uuid' => $verifyUuid,
+            'auto' => $auto,
         ]);
     }
 
