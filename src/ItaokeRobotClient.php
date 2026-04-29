@@ -452,6 +452,23 @@ class ItaokeRobotClient
         ]);
     }
 
+    /**
+     * 刷新 CDN
+     * 当发送消息遇到 CDN 报错时调用此接口刷新 CDN 后重试
+     *
+     * @param $robotId - 机器人 ID
+     * @return array
+     *
+     * @author Yingjie Feng <fengit@shanjing-inc.com>
+     */
+    public function refreshDns($robotId)
+    {
+        $api = "ItaokeRobotRefreshDnsRequest";
+        return $this->sendRequest($api, [
+            'robot_id' => $robotId,
+        ]);
+    }
+
     /**********************************************************************************************
      ***************************************     基础方法     **************************************
      *********************************************************************************************/
