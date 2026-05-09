@@ -362,6 +362,64 @@ class ItaokeRobotClient
     }
 
     /**
+     * 上传图片消息
+     * @param $robotId
+     * @param $toWxId
+     * @param $picUrl
+     * @return array
+     */
+    public function uploadImageMsg($robotId, $toWxId, $picUrl)
+    {
+        $api = "ItaokeRobotUploadImageRequest";
+        return $this->sendRequest($api, [
+            'robot_id' => $robotId,
+            'wx_id' => $toWxId,
+            'url' => $picUrl,
+        ]);
+    }
+
+    /**
+     * 转发已上传图片
+     * @param $robotId
+     * @param $toWxId
+     * @param $aesKey
+     * @param $fileId
+     * @param $midImgLength
+     * @param $thumbImgLength
+     * @param $thumbWidth
+     * @param $thumbHeight
+     * @param $bigImgLength
+     * @param $md5
+     * @return array
+     */
+    public function forwardUploadedImageMsg(
+        $robotId,
+        $toWxId,
+        $aesKey,
+        $fileId,
+        $midImgLength,
+        $thumbImgLength,
+        $thumbWidth,
+        $thumbHeight,
+        $bigImgLength,
+        $md5
+    ) {
+        $api = "ItaokeRobotForwardImageRequest";
+        return $this->sendRequest($api, [
+            'robot_id' => $robotId,
+            'wx_id' => $toWxId,
+            'aes_key' => $aesKey,
+            'file_id' => $fileId,
+            'mid_img_length' => $midImgLength,
+            'thumb_img_length' => $thumbImgLength,
+            'thumb_width' => $thumbWidth,
+            'thumb_height' => $thumbHeight,
+            'big_img_length' => $bigImgLength,
+            'md5' => $md5,
+        ]);
+    }
+
+    /**
      * 转发图片
      * @param $robotId - 机器人
      * @param $toWxId  - 发送微信好友/群id。一般wxid_开头
